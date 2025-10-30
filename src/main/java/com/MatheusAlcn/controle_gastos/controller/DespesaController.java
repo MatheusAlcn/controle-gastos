@@ -23,6 +23,13 @@ public class DespesaController {
         return ResponseEntity.ok(repo.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Despesa> buscarPorId(@PathVariable Long id){
+        return repo.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<Despesa> create(@RequestBody Despesa despesa) {
         Despesa novaDespesa = repo.save(despesa);

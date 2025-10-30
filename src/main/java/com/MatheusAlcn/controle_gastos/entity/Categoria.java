@@ -20,10 +20,4 @@ public class Categoria {
 
     @Column(name = "categoria", nullable = false)
     private String nome;
-
-    /*
-    public Categoria(Long id) {
-        this.id = id;
-    }
-    */
 }

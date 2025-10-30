@@ -1,6 +1,5 @@
 package com.MatheusAlcn.controle_gastos.controller;
 
-
 import com.MatheusAlcn.controle_gastos.entity.Categoria;
 import com.MatheusAlcn.controle_gastos.repository.CategoriaRepository;
 import org.springframework.http.HttpStatus;
@@ -20,16 +19,23 @@ public class CategoriaController {
     }
 
     @GetMapping
-     public ResponseEntity<List<Categoria>> listarTodos() {
-         return ResponseEntity.ok(repo.findAll());
-     }
+    public ResponseEntity<List<Categoria>> listarTodos() {
+        return ResponseEntity.ok(repo.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Categoria> buscarPorId(@PathVariable Long id) {
+        return repo.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @PostMapping
     public ResponseEntity<Categoria> create(@RequestBody Categoria categoria) {
         categoria.setId(null);
         Categoria novaCategoria = repo.save(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
-     }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Categoria> update(@PathVariable Long id, @RequestBody Categoria body) {
@@ -37,15 +43,14 @@ public class CategoriaController {
             c.setNome(body.getNome());
             return ResponseEntity.ok(repo.save(c));
         }).orElse(ResponseEntity.notFound().build());
-     }
+    }
 
-     @DeleteMapping("/{id}")
-     public ResponseEntity<Void> delete(@PathVariable Long id) {
-         if (!repo.existsById(id)) return ResponseEntity.notFound().build();
-         repo.deleteById(id);
-         ResponseEntity<Void> build = ResponseEntity.noContent().build();
-         return build;
-     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        repo.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
-
-
